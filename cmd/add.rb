@@ -55,10 +55,11 @@ module Homebrew
         parsed_entries = Bundle::Dsl.new(brewfile.read).entries
         bundle_taps, bundle_formulae, bundle_casks = [], [], []
         parsed_entries.each do |entry|
-            case entry.type # Could match nothing!!!
+            case entry.type
                 when :tap; bundle_taps
                 when :brew; bundle_formulae
                 when :cask; bundle_casks
+                else; next # Matches `mas` and `whalebrew`. This fixes issue #1.
             end << entry.name
         end
 
