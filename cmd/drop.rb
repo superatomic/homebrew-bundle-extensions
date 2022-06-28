@@ -53,7 +53,7 @@ module Homebrew
             end << entry.name
         end
 
-        # Open the Brewfile and add the requested items to it.
+        # Open the Brewfile and drop the requested items from it.
         brews.each do |brew|
 
             # Get the corresponding reference list and terms for the given item.
