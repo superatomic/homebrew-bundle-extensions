@@ -32,7 +32,7 @@ module Homebrew
         args = drop_args.parse
         silent = args.quiet?
 
-        brews = args.named.to_formulae_and_casks(prefer_loading_from_api: true)
+        brews = args.named.to_formulae_and_casks
 
         # Require this file: https://github.com/Homebrew/homebrew-bundle/blob/master/lib/bundle.rb
         require_relative "../../../homebrew/homebrew-bundle/lib/bundle"
