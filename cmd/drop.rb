@@ -68,7 +68,7 @@ module Homebrew
 
             # Drop the formula/cask from the file if it exists.
             unless current_bundle_list.include?(brew.full_name) || (brew_name_resolves_to_full_name && current_bundle_list.include?(brew.name))
-                opoo "#{display_type} '#{brew.full_name}' is already not present in the Brewfile. Skipping." unless silent
+                opoo "#{display_type} '#{brew.full_name}' is not present in the Brewfile. Skipping." unless silent
             else
 
                 # Get the correct regex to match for the brew name.
@@ -81,7 +81,7 @@ module Homebrew
                 lines = []
 
                 File.foreach(brewfile) do |line|
-                    lines.push(line) unless line.match(/#{brewfile_prefix_type} ["'](#{regex_name})["']/)
+                    lines.push(line) unless line.match(/^\s*#{brewfile_prefix_type}\s+["'](#{regex_name})["']/)
                 end
 
                 File.open(brewfile, "w+") do |f|

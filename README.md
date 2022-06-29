@@ -48,7 +48,6 @@ or by setting the `$HOMEBREW_BUNDLE_FILE` environment variable.
 
 This project is licensed under the [BSD 2-Clause "Simplified" License](LICENSE).
 
-
 [Homebrew]: https://brew.sh
 [brew bundles]: https://github.com/Homebrew/homebrew-bundle
 [bat]: https://github.com/sharkdp/bat
