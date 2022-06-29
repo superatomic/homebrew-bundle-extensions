@@ -75,7 +75,7 @@ module Homebrew
                     end
                 end
 
-                File.open("Brewfile", "w+") do |f|
+                File.open(brewfile, "w+") do |f|
                     f.puts(lines)
                 end
 
