@@ -63,16 +63,25 @@ module Homebrew
                 [bundle_casks, "cask", "Cask"]
             end
 
+            # Check to see if the brew name (excluding tap) resolves to the full name (including tap).
+            brew_name_resolves_to_full_name = Formulary.resolve(brew.name).full_name == brew.full_name
+
             # Drop the formula/cask from the file if it exists.
-            unless current_bundle_list.include?(brew.full_name) || current_bundle_list.include?(brew.name)
+            unless current_bundle_list.include?(brew.full_name) || (brew_name_resolves_to_full_name && current_bundle_list.include?(brew.name))
                 opoo "#{display_type} '#{brew.full_name}' is already not present in the Brewfile. Skipping." unless silent
             else
+
+                # Get the correct regex to match for the brew name.
+                regex_name = if brew_name_resolves_to_full_name
+                    "#{brew.full_name}|#{brew.name}"
+                else
+                    brew.full_name
+                end
+
                 lines = []
 
                 File.foreach(brewfile) do |line|
-                    unless line.match(/#{brewfile_prefix_type} ["'](#{brew.full_name}|#{brew.name})["']/)
-                        lines.push(line)
-                    end
+                    lines.push(line) unless line.match(/#{brewfile_prefix_type} ["'](#{regex_name})["']/)
                 end
 
                 File.open(brewfile, "w+") do |f|
