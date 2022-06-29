@@ -70,7 +70,7 @@ module Homebrew
                 lines = []
 
                 File.foreach(brewfile) do |line|
-                    if not line.match(/#{brewfile_prefix_type} ["']#{brew.full_name}["']/)
+                    unless line.match(/#{brewfile_prefix_type} ["']#{brew.full_name}["']/)
                         lines.push(line)
                     end
                 end
