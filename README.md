@@ -24,6 +24,12 @@ tap "superatomic/bundle-extensions"
 
   You can specify multiple formulae and casks at once, just like the `brew install` command.
 
+- **`brew drop [FORMULA/CASK...]`**
+
+  Removes one or more provided formulae and/or casks from a `Brewfile`.
+
+  You can specify multiple formulae and casks at once, just like the `brew uninstall` command.
+
 - **`brew file`**
 
   Opens the `Brewfile` in the default editor (respects the chosen homebrew editor).
@@ -41,7 +47,6 @@ or by setting the `$HOMEBREW_BUNDLE_FILE` environment variable.
 ## License
 
 This project is licensed under the [BSD 2-Clause "Simplified" License](LICENSE).
-
 
 [Homebrew]: https://brew.sh
 [brew bundles]: https://github.com/Homebrew/homebrew-bundle
