@@ -79,16 +79,31 @@ module Homebrew
                 end
 
                 lines = []
+                has_removed_line = false
 
                 File.foreach(brewfile) do |line|
-                    lines.push(line) unless line.match(/^\s*#{brewfile_prefix_type}\s+["'](#{regex_name})["']/)
+                    unless line.match(/^\s*#{brewfile_prefix_type}\s+["'](#{regex_name})["']/)
+                        lines.push(line)
+                    else
+                        has_removed_line = true
+                    end
                 end
 
-                File.open(brewfile, "w+") do |f|
-                    f.puts(lines)
-                end
+                # Check to see if any lines were dropped from the file. If not, that's an error!
+                if has_removed_line
+                    # Write back all lines that weren't dropped.
+                    File.open(brewfile, "w+") do |f|
+                        f.puts(lines)
+                    end
 
-                oh1 "Dropped #{display_type} #{Formatter.identifier(brew.full_name)} from Brewfile" unless silent
+                    oh1 "Dropped #{display_type} #{Formatter.identifier(brew.full_name)} from Brewfile" unless silent
+                else
+                    ofail <<~EOS
+                        Couldn't remove #{display_type} #{Formatter.identifier(brew.full_name)} from Brewfile
+                        Please open an issue on GitHub:
+                            https://github.com/superatomic/homebrew-bundle-extensions
+                    EOS
+                end
             end
         end
     end
