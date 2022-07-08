@@ -71,10 +71,10 @@ module Homebrew
             brews.each do |brew|
 
                 # Get the corresponding reference list and terms for the given item.
-                current_bundle_list, brewfile_prefix_type, display_type = if brew.is_a?(Formula)
-                    [bundle_formulae, "brew", "Formula"]
+                current_bundle_list, brewfile_prefix_type, display_type, resolved_brew_name = if brew.is_a?(Formula)
+                    [bundle_formulae, "brew", "Formula", Formulary.resolve(brew.name)]
                 else
-                    [bundle_casks, "cask", "Cask"]
+                    [bundle_casks, "cask", "Cask", Cask::CaskLoader.load(brew.token)]
                 end
 
                 # If the formula/cask is from a tap that isn't tapped yet in the file, add it first.
@@ -86,8 +86,11 @@ module Homebrew
                     bundle_taps << brew.tap.name
                 end
 
+                # Check to see if the brew name (excluding tap) resolves to the full name (including tap).
+                brew_name_resolves_to_full_name = resolved_brew_name.full_name == brew.full_name
+
                 # Add the formula/cask to the file if it hasn't already been added.
-                unless current_bundle_list.include?(brew.full_name) || current_bundle_list.include?(brew.name)
+                unless current_bundle_list.include?(brew.full_name) || (brew_name_resolves_to_full_name && current_bundle_list.include?(brew.name))
                     file << "#{brewfile_prefix_type} \"#{brew.full_name}\"" << "\n"
 
                     oh1 "Added #{display_type} #{Formatter.identifier(brew.full_name)} to Brewfile" unless silent
