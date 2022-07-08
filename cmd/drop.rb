@@ -57,23 +57,23 @@ module Homebrew
         brews.each do |brew|
 
             # Get the corresponding reference list and terms for the given item.
-            current_bundle_list, brewfile_prefix_type, display_type, resolved_brew_name = if brew.is_a?(Formula)
-                [bundle_formulae, "brew", "Formula", Formulary.resolve(brew.name)]
+            current_bundle_list, brewfile_prefix_type, display_type, brew_name, resolved_brew_name = if brew.is_a?(Formula)
+                [bundle_formulae, "brew", "Formula", brew.name, Formulary.resolve(brew.name)]
             else
-                [bundle_casks, "cask", "Cask", Cask::CaskLoader.load(brew.token)]
+                [bundle_casks, "cask", "Cask", brew.token, Cask::CaskLoader.load(brew.token)]
             end
 
             # Check to see if the brew name (excluding tap) resolves to the full name (including tap).
             brew_name_resolves_to_full_name = resolved_brew_name.full_name == brew.full_name
 
             # Drop the formula/cask from the file if it exists.
-            unless current_bundle_list.include?(brew.full_name) || (brew_name_resolves_to_full_name && current_bundle_list.include?(brew.name))
+            unless current_bundle_list.include?(brew.full_name) || (brew_name_resolves_to_full_name && current_bundle_list.include?(brew_name))
                 opoo "#{display_type} '#{brew.full_name}' is not present in the Brewfile. Skipping." unless silent
             else
 
                 # Get the correct regex to match for the brew name.
                 regex_name = if brew_name_resolves_to_full_name
-                    "#{brew.full_name}|#{brew.name}"
+                    "#{brew.full_name}|#{brew_name}"
                 else
                     brew.full_name
                 end
