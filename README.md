@@ -24,6 +24,9 @@ tap "superatomic/bundle-extensions"
 
   You can specify multiple formulae and casks at once, just like the `brew install` command.
 
+  To use single quotes instead of double quotes for Brewfile lines (e.g. `brew 'bat'` instead of `brew "bat"`),
+  set the environment variable `HOMEBREW_BUNDLE_QUOTE_TYPE` to the value `single`.
+
 - **`brew drop [FORMULA/CASK...]`**
 
   Removes one or more provided formulae and/or casks from a `Brewfile`.

@@ -10,6 +10,9 @@ module Homebrew
 
                 You can specify the `Brewfile` location using `--file`, `--global`,
                 or by setting the `HOMEBREW_BUNDLE_FILE` environment variable.
+
+                To use single quotes instead of double quotes for Brewfile lines (e.g. `brew 'bat'` instead of `brew "bat"`),
+                set the environment variable `HOMEBREW_BUNDLE_QUOTE_TYPE` to the value `single`.
             EOS
 
             switch "-g", "--global",
@@ -63,6 +66,9 @@ module Homebrew
             end << entry.name
         end
 
+        # Use single quotes instead of double quotes in the Brewfile if the environment variable HOMEBREW_BUNDLE_QUOTE_TYPE is set to "single"
+        quote_type = ENV['HOMEBREW_BUNDLE_QUOTE_TYPE'] != 'single' ? '"' : '\''
+
         # Open the Brewfile and add the requested items to it.
         File.open(brewfile, 'a+') do |file|
             # Add a newline to the end of the file if needed.
@@ -79,7 +85,7 @@ module Homebrew
 
                 # If the formula/cask is from a tap that isn't tapped yet in the file, add it first.
                 unless bundle_taps.include?(brew.tap.name)
-                    file << "tap \"#{brew.tap.name}\"" << "\n"
+                    file << "tap #{quote_type}#{brew.tap.name}#{quote_type}" << "\n"
                     oh1 "Added Tap #{Formatter.identifier(brew.tap.name)} to Brewfile"
 
                     # Add the tap to the array for future iterations, so we don't add it to the Brewfile multiple times.
@@ -91,7 +97,7 @@ module Homebrew
 
                 # Add the formula/cask to the file if it hasn't already been added.
                 unless current_bundle_list.include?(brew.full_name) || (brew_name_resolves_to_full_name && current_bundle_list.include?(brew_name))
-                    file << "#{brewfile_prefix_type} \"#{brew.full_name}\"" << "\n"
+                    file << "#{brewfile_prefix_type} #{quote_type}#{brew.full_name}#{quote_type}" << "\n"
 
                     oh1 "Added #{display_type} #{Formatter.identifier(brew.full_name)} to Brewfile" unless silent
 
