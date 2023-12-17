@@ -84,9 +84,10 @@ module Homebrew
                 end
 
                 # If the formula/cask is from a tap that isn't tapped yet in the file, add it first.
-                unless bundle_taps.include?(brew.tap.name)
+                # Make sure not to tap homebrew/core or homebrew/cask, since these formulae install from the API. (Fixes issue #12)
+                unless bundle_taps.include?(brew.tap.name) || ['homebrew/core', 'homebrew/cask'].include?(brew.tap.name)
                     file << "tap #{quote_type}#{brew.tap.name}#{quote_type}" << "\n"
-                    oh1 "Added Tap #{Formatter.identifier(brew.tap.name)} to Brewfile"
+                    oh1 "Added Tap #{Formatter.identifier(brew.tap.name)} to Brewfile" unless silent
 
                     # Add the tap to the array for future iterations, so we don't add it to the Brewfile multiple times.
                     bundle_taps << brew.tap.name
