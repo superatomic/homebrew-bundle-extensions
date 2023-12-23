@@ -24,6 +24,11 @@ module Homebrew
 
             switch "--formula", "--formulae", description: "Treat all named arguments as formulae."
             switch "--cask", "--casks", description: "Treat all named arguments as casks."
+            switch "--describe",
+                env:         :bundle_dump_describe,
+                description: "`add` adds a description comment above each line, unless the " \
+                             "package does not have a description. " \
+                             "This is enabled by default if HOMEBREW_BUNDLE_DUMP_DESCRIBE is set."
 
             conflicts "formula", "cask"
 
@@ -98,7 +103,15 @@ module Homebrew
 
                 # Add the formula/cask to the file if it hasn't already been added.
                 unless current_bundle_list.include?(brew.full_name) || (brew_name_resolves_to_full_name && current_bundle_list.include?(brew_name))
-                    file << "#{brewfile_prefix_type} #{quote_type}#{brew.full_name}#{quote_type}" << "\n"
+                    # Adapted from `BrewDumper.dump`:
+                    # https://github.com/Homebrew/homebrew-bundle/blob/master/lib/bundle/brew_dumper.rb#L59-L64
+                    brewline = if args.describe? && brew.desc
+                        brew.desc.split("\n").map { |s| "# #{s}\n" }.join
+                    else
+                        ""
+                    end
+
+                    file << brewline + "#{brewfile_prefix_type} #{quote_type}#{brew.full_name}#{quote_type}" << "\n"
 
                     oh1 "Added #{display_type} #{Formatter.identifier(brew.full_name)} to Brewfile" unless silent
 
