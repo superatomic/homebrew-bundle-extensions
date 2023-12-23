@@ -49,7 +49,7 @@ or by setting the `$HOMEBREW_BUNDLE_FILE` environment variable.
 
 ## License
 
-This project is licensed under the [BSD 2-Clause "Simplified" License](LICENSE).
+This project is duel-licensed under the [BSD 2-Clause "Simplified" License](LICENSE-BSD) and the [MIT License](LICENSE-MIT).
 
 [Homebrew]: https://brew.sh
 [brew bundles]: https://github.com/Homebrew/homebrew-bundle
