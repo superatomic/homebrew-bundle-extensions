@@ -26,9 +26,9 @@ module Homebrew
             switch "--cask", "--casks", description: "Treat all named arguments as casks."
             switch "--describe",
                 env:         :bundle_dump_describe,
-                description: "`add` adds a description comment above each line, unless the " \
+                description: "Add a descriptive comment above each line, unless the " \
                              "package does not have a description. " \
-                             "This is enabled by default if HOMEBREW_BUNDLE_DUMP_DESCRIBE is set."
+                             "This is enabled by default if `HOMEBREW_BUNDLE_DUMP_DESCRIBE` is set."
 
             conflicts "formula", "cask"
 
