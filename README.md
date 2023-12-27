@@ -27,6 +27,9 @@ tap "superatomic/bundle-extensions"
   To use single quotes instead of double quotes for Brewfile lines (e.g. `brew 'bat'` instead of `brew "bat"`),
   set the environment variable `HOMEBREW_BUNDLE_QUOTE_TYPE` to the value `single`.
 
+  To add a descriptive comment above each line (like `brew bundle dump --describe`), use the `--describe` option.
+  This is enabled by default if the environment variable `HOMEBREW_BUNDLE_DUMP_DESCRIBE` is set.
+
 - **`brew drop [FORMULA/CASK...]`**
 
   Removes one or more provided formulae and/or casks from a `Brewfile`.
