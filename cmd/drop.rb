@@ -42,7 +42,7 @@ module Homebrew
         ohai "Using Brewfile at '#{brewfile}'" unless silent
 
         # Parse the Brewfile and create separate arrays for formulae, casks, and taps.
-        parsed_entries = Bundle::Dsl.new(brewfile.read).entries
+        parsed_entries = Bundle::Dsl.new(brewfile).entries
         bundle_taps, bundle_formulae, bundle_casks = [], [], []
         parsed_entries.each do |entry|
             case entry.type
